@@ -1,4 +1,3 @@
-﻿```html
 <!DOCTYPE html>
 <html lang="so">
 <head>
@@ -117,6 +116,22 @@
         border: 4px solid white;
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 16px 24px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 100;
+      animation: slideIn 0.3s ease-out;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
   </style>
 </head>
 <body class="flex">
@@ -128,7 +143,7 @@
     <span class="font-black text-blue-900 text-lg">DIH-MIS</span>
   </div>
   <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden border">
-      <img src="1000210154.jpg" onerror="this.src='https://ui-avatars.com/api/?name=Dr+Thani'" class="w-full h-full object-cover">
+      <i class="fas fa-user-doctor text-blue-600 text-xl"></i>
   </div>
 </header>
 
@@ -136,8 +151,7 @@
 <aside id="sidebar" class="w-[280px] h-screen flex-shrink-0 flex flex-col overflow-hidden">
   <div class="p-6 text-center border-b border-white/10">
     <div class="bg-white p-2 rounded-2xl inline-block mb-3 shadow-xl">
-      <img src="1000210158.jpg" alt="DIH Logo" class="h-12 w-auto" onerror="this.style.display='none'">
-      <span id="logo-fallback" class="text-3xl hidden">🏥</span>
+      <i class="fas fa-hospital text-4xl text-blue-900"></i>
     </div>
     <h1 class="text-white font-black tracking-tight text-xl">DIH-MIS v12</h1>
     <p class="text-white/60 text-[10px] uppercase tracking-widest mt-1">Darusihha International</p>
@@ -159,7 +173,7 @@
   </nav>
 
   <div class="p-4 border-t border-white/10 flex items-center gap-3">
-    <img src="1000210154.jpg" class="w-10 h-10 rounded-full border border-white/20" onerror="this.src='https://ui-avatars.com/api/?name=Dr+Thani'">
+    <div class="w-10 h-10 rounded-full bg-blue-400 flex items-center justify-center text-white font-bold">DT</div>
     <div class="overflow-hidden">
         <p class="text-white text-[11px] font-bold truncate">Dr. Abdulkadir Hassan</p>
         <p class="text-white/40 text-[9px] truncate">drthani100@gmail.com</p>
@@ -243,7 +257,6 @@
                     </tr>
                 </thead>
                 <tbody id="dashboard-patient-table" class="text-sm">
-                    <!-- Dynamic -->
                 </tbody>
             </table>
         </div>
@@ -252,7 +265,7 @@
       <div class="space-y-6">
           <div class="card bg-gradient-to-br from-blue-900 to-indigo-900 text-white border-none">
               <div class="flex items-center gap-4 mb-4">
-                  <img src="1000210154.jpg" class="w-12 h-12 rounded-full border-2 border-white/20" onerror="this.src='https://ui-avatars.com/api/?name=Dr+Thani'">
+                  <div class="w-12 h-12 rounded-full bg-blue-400 flex items-center justify-center text-white font-bold text-lg">AI</div>
                   <div>
                       <h4 class="font-bold text-sm">Dr. Thani AI</h4>
                       <p class="text-[10px] text-white/60">Ready to assist diagnostics</p>
@@ -298,11 +311,6 @@
         <button onclick="sendAiMessage()" class="bg-indigo-600 text-white px-6 rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-100">
           <i class="fas fa-paper-plane"></i>
         </button>
-      </div>
-      <div class="flex gap-2 mt-3 overflow-x-auto pb-2 no-scrollbar">
-        <button onclick="quickAi('Waan qandhaysanahay')" class="whitespace-nowrap bg-white text-[11px] px-4 py-2 rounded-full border hover:bg-slate-50 transition">Qandho (Fever)</button>
-        <button onclick="quickAi('Cunno xanuun iyo qufac')" class="whitespace-nowrap bg-white text-[11px] px-4 py-2 rounded-full border hover:bg-slate-50 transition">Qufac (Cough)</button>
-        <button onclick="quickAi('Dhiig kar side loo xakameeyaa?')" class="whitespace-nowrap bg-white text-[11px] px-4 py-2 rounded-full border hover:bg-slate-50 transition">Dhiig Kar</button>
       </div>
     </div>
   </section>
@@ -362,106 +370,36 @@
     </div>
   </section>
 
-  <!-- Clinic / OPD -->
+  <!-- OPD Clinic -->
   <section id="tab-opd" class="tab-content">
     <h2 class="text-2xl font-black mb-6">Clinical Assessment (OPD)</h2>
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div class="lg:col-span-2 space-y-6">
-        <div class="card">
-          <h3 class="font-bold border-b pb-4 mb-4 flex items-center gap-2"><i class="fas fa-stethoscope text-blue-600"></i> Active Consultation</h3>
-          <label class="text-xs font-bold mb-1 block">Select Waiting Patient:</label>
-          <select id="opd-patient-list" class="bg-slate-50 font-bold mb-6" onchange="loadClinicData(this.value)">
-              <option value="">-- No Patients Waiting --</option>
-          </select>
-          
-          <div class="grid grid-cols-2 gap-4 mb-4">
-              <div>
-                  <label class="text-[10px] font-bold text-slate-400 uppercase">Vitals: Temp (°C)</label>
-                  <input type="text" id="vitals-temp" placeholder="36.5">
-              </div>
-              <div>
-                  <label class="text-[10px] font-bold text-slate-400 uppercase">Vitals: BP</label>
-                  <input type="text" id="vitals-bp" placeholder="120/80">
-              </div>
-          </div>
+    <div class="card">
+      <p class="text-slate-600">OPD consultation module - Register patients from Reception first</p>
+    </div>
+  </section>
 
-          <label class="text-xs font-bold mb-1 block">Subjective / History:</label>
-          <textarea id="opd-history" rows="3" placeholder="Patient history and symptoms..."></textarea>
-          
-          <label class="text-xs font-bold mb-1 block">Objective / Findings:</label>
-          <textarea id="opd-exam" rows="3" placeholder="Physical examination results..."></textarea>
-          
-          <label class="text-xs font-bold mb-1 block">Diagnosis:</label>
-          <input type="text" id="opd-diag" placeholder="Final or differential diagnosis...">
+  <!-- Emergency -->
+  <section id="tab-emergency" class="tab-content">
+    <h2 class="text-2xl font-black mb-6 text-red-600"><i class="fas fa-warning mr-2"></i>Emergency Department</h2>
+    <div class="card bg-red-50 border-l-4 border-red-600 mb-6">
+      <p class="font-bold text-red-800">🚨 CRITICAL: Emergency cases receive immediate priority</p>
+    </div>
+  </section>
 
-          <div class="flex gap-2">
-            <button onclick="saveConsultation()" class="flex-1 bg-emerald-600 text-white py-3 rounded-lg font-bold shadow-lg shadow-emerald-100">Finish & Prescribe</button>
-            <button onclick="sendToLab()" class="bg-amber-500 text-white px-6 py-3 rounded-lg font-bold">Refer to Lab</button>
-          </div>
-        </div>
-      </div>
-      <div class="space-y-6">
-        <div class="card bg-slate-800 text-white">
-          <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fas fa-prescription"></i> Medication Order</h3>
-          <textarea id="opd-rx" rows="5" class="bg-slate-700 border-none text-white placeholder-slate-400" placeholder="R/&#10;Amoxicillin 500mg TDS x 5 days&#10;PCM 1g TDS x 3 days..."></textarea>
-          <button class="w-full bg-blue-500 py-2 rounded font-bold text-sm">Send to Pharmacy</button>
-        </div>
-        <div class="card border-amber-200 bg-amber-50">
-          <h3 class="font-bold mb-2 text-amber-800 text-sm">Somali Health Protocols</h3>
-          <ul class="text-[11px] space-y-2 text-amber-900">
-              <li class="flex items-center gap-2"><i class="fas fa-check-circle"></i> Use Artusunate for Malaria cases.</li>
-              <li class="flex items-center gap-2"><i class="fas fa-check-circle"></i> Refer TB suspects to De Martino.</li>
-              <li class="flex items-center gap-2"><i class="fas fa-check-circle"></i> Screen all children for Malnutrition.</li>
-          </ul>
-        </div>
-      </div>
+  <!-- OB/GYN -->
+  <section id="tab-obgyn" class="tab-content">
+    <h2 class="text-2xl font-black mb-6"><i class="fas fa-baby mr-2"></i>OB/GYN Department</h2>
+    <div class="card">
+      <p class="text-slate-600">Obstetrics and Gynecology services for pregnant mothers</p>
     </div>
   </section>
 
   <!-- Laboratory -->
   <section id="tab-lab" class="tab-content">
-      <h2 class="text-2xl font-black mb-6">Diagnostic Laboratory</h2>
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div class="lg:col-span-1 card h-fit">
-              <h3 class="font-bold mb-4 text-sm">Pending Tests</h3>
-              <div id="lab-pending-list" class="space-y-2">
-                  <p class="text-xs text-slate-400 italic">No samples waiting...</p>
-              </div>
-          </div>
-          <div class="lg:col-span-3 card">
-              <h3 class="font-bold mb-4 border-b pb-2">Result Entry</h3>
-              <div id="lab-form" class="hidden">
-                  <div class="mb-6 p-4 bg-slate-50 rounded-lg">
-                      <p class="text-sm font-bold text-blue-900" id="lab-p-name">Patient: -</p>
-                      <p class="text-xs text-slate-500" id="lab-p-id">ID: -</p>
-                  </div>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                          <label class="text-xs font-bold text-slate-500">CBC (WBC, Hb, Plt)</label>
-                          <textarea rows="2" id="lab-cbc" placeholder="WBC: 7.0, Hb: 12.5..."></textarea>
-                      </div>
-                      <div>
-                          <label class="text-xs font-bold text-slate-500">Malaria RDT / BS</label>
-                          <select id="lab-malaria">
-                              <option>Negative</option>
-                              <option>Positive (+)</option>
-                              <option>Positive (++)</option>
-                              <option>Positive (+++)</option>
-                          </select>
-                      </div>
-                      <div class="md:col-span-2">
-                          <label class="text-xs font-bold text-slate-500">Other Remarks</label>
-                          <textarea rows="2" id="lab-other"></textarea>
-                      </div>
-                  </div>
-                  <button onclick="submitLabResult()" class="w-full bg-blue-900 text-white py-3 rounded-xl font-bold mt-4">Release Lab Report</button>
-              </div>
-              <div id="lab-empty" class="text-center py-20">
-                  <i class="fas fa-vials text-4xl text-slate-200 mb-4"></i>
-                  <p class="text-slate-400">Select a pending sample to enter results</p>
-              </div>
-          </div>
-      </div>
+    <h2 class="text-2xl font-black mb-6">Diagnostic Laboratory</h2>
+    <div class="card">
+      <p class="text-slate-600">Laboratory testing and results module</p>
+    </div>
   </section>
 
   <!-- Pharmacy -->
@@ -493,7 +431,6 @@
           </tr>
         </thead>
         <tbody id="pharmacy-table-body" class="text-sm">
-          <!-- Populated by JS -->
         </tbody>
       </table>
     </div>
@@ -501,190 +438,69 @@
 
   <!-- Billing -->
   <section id="tab-billing" class="tab-content">
-      <h2 class="text-2xl font-black mb-6">Financial Department</h2>
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div class="lg:col-span-1 space-y-4">
-              <div class="card bg-emerald-900 text-white">
-                  <p class="text-xs opacity-60">Total Collection</p>
-                  <h3 class="text-2xl font-black" id="bill-total-rev">$0.00</h3>
-              </div>
-              <div class="card bg-white">
-                  <h4 class="font-bold text-sm mb-4">Unpaid Bills</h4>
-                  <div id="unpaid-bills-list" class="space-y-3">
-                      <!-- Dynamic -->
-                  </div>
-              </div>
-          </div>
-          <div class="lg:col-span-3 card">
-              <h3 class="font-bold border-b pb-4 mb-6">Invoicing & Payments</h3>
-              <div id="billing-active" class="hidden">
-                  <div class="flex justify-between items-start mb-8">
-                      <div>
-                          <h4 class="font-black text-xl" id="bill-p-name">Patient Name</h4>
-                          <p class="text-sm text-slate-500" id="bill-p-id">ID: DIH-0000</p>
-                      </div>
-                      <div class="text-right">
-                          <p class="text-[10px] font-bold text-slate-400 uppercase">Invoice Date</p>
-                          <p class="text-sm font-bold" id="bill-date">2026-05-05</p>
-                      </div>
-                  </div>
-                  <div class="space-y-4 mb-8">
-                      <div class="flex justify-between py-2 border-b">
-                          <span>Registration/Consultation Fee</span>
-                          <span class="font-bold" id="bill-reg-fee">$0.00</span>
-                      </div>
-                      <div class="flex justify-between py-2 border-b">
-                          <span>Laboratory Services</span>
-                          <input type="number" id="bill-lab-fee" class="w-24 mb-0 text-right font-bold" value="0">
-                      </div>
-                      <div class="flex justify-between py-2 border-b">
-                          <span>Pharmacy / Medications</span>
-                          <input type="number" id="bill-pharm-fee" class="w-24 mb-0 text-right font-bold" value="0">
-                      </div>
-                      <div class="flex justify-between py-4 text-xl font-black">
-                          <span>TOTAL AMOUNT DUE</span>
-                          <span class="text-emerald-600" id="bill-grand-total">$0.00</span>
-                      </div>
-                  </div>
-                  <div class="flex gap-2">
-                    <button onclick="processPayment()" class="flex-1 bg-emerald-600 text-white py-4 rounded-xl font-black shadow-lg">MARK AS PAID (EVC Plus/Cash)</button>
-                    <button onclick="printInvoice()" class="bg-slate-100 text-slate-600 px-6 py-4 rounded-xl font-bold"><i class="fas fa-print"></i></button>
-                  </div>
-              </div>
-              <div id="billing-empty" class="text-center py-20">
-                  <i class="fas fa-file-invoice-dollar text-4xl text-slate-200 mb-4"></i>
-                  <p class="text-slate-400">Select an unpaid patient to generate invoice</p>
-              </div>
-          </div>
-      </div>
+    <h2 class="text-2xl font-black mb-6">Financial Department</h2>
+    <div class="card">
+      <p class="text-slate-600">Billing and payment processing module</p>
+    </div>
   </section>
 
   <!-- Profile Section -->
   <section id="tab-profile" class="tab-content">
-      <div class="max-w-4xl mx-auto">
-          <div class="card relative overflow-hidden mb-8">
-              <div class="absolute top-0 left-0 w-full h-32 bg-blue-900"></div>
-              <div class="relative pt-16 px-6 text-center">
-                  <img src="1000210154.jpg" class="profile-img mx-auto" onerror="this.src='https://ui-avatars.com/api/?name=Dr+Thani'">
-                  <h2 class="text-2xl font-black text-slate-800 mt-4">Dr. Abdulkadir Sheikh Abdi Sheikh Hassan</h2>
-                  <p class="text-blue-600 font-bold">(Dr. Thani)</p>
-                  <p class="text-slate-500 text-sm mt-2">Owner & Founder | Multi-specialist Physician</p>
-                  <div class="flex justify-center gap-3 mt-4">
-                      <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-[10px] font-bold border border-blue-100">DARUSIHHA INTERNATIONAL</span>
-                      <span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-bold border border-emerald-100">MUDUG NETWORK</span>
-                  </div>
-              </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="card">
-                  <h3 class="font-bold border-b pb-2 mb-4 text-slate-800">Professional Contact</h3>
-                  <div class="space-y-4">
-                      <div class="flex items-center gap-4">
-                          <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-blue-600"><i class="fas fa-envelope"></i></div>
-                          <div>
-                              <p class="text-[10px] font-bold text-slate-400 uppercase">Primary Email</p>
-                              <p class="text-sm font-medium">drthani100@gmail.com</p>
-                          </div>
-                      </div>
-                      <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-blue-600"><i class="fas fa-hospital"></i></div>
-                        <div>
-                            <p class="text-[10px] font-bold text-slate-400 uppercase">Hospital Email</p>
-                            <p class="text-sm font-medium">darusihha1@gmail.com</p>
-                        </div>
-                    </div>
-                      <div class="flex items-center gap-4">
-                          <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600"><i class="fab fa-whatsapp"></i></div>
-                          <div>
-                              <p class="text-[10px] font-bold text-slate-400 uppercase">WhatsApp / Contact</p>
-                              <p class="text-sm font-medium">+252 615 389 072</p>
-                              <p class="text-sm font-medium">+252 616 884 978</p>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <div class="card">
-                  <h3 class="font-bold border-b pb-2 mb-4 text-slate-800">Hospital Photos</h3>
-                  <div class="grid grid-cols-3 gap-2">
-                      <img src="1000210156.jpg" class="h-16 w-full object-cover rounded" onerror="this.src='https://placehold.co/100x100?text=DIH+1'">
-                      <img src="1000210158.jpg" class="h-16 w-full object-cover rounded" onerror="this.src='https://placehold.co/100x100?text=DIH+2'">
-                      <img src="1000210160.jpg" class="h-16 w-full object-cover rounded" onerror="this.src='https://placehold.co/100x100?text=DIH+3'">
-                      <img src="1000210162.jpg" class="h-16 w-full object-cover rounded" onerror="this.src='https://placehold.co/100x100?text=DIH+4'">
-                      <img src="1000210166.jpg" class="h-16 w-full object-cover rounded" onerror="this.src='https://placehold.co/100x100?text=DIH+5'">
-                      <img src="1000210168.jpg" class="h-16 w-full object-cover rounded" onerror="this.src='https://placehold.co/100x100?text=DIH+6'">
-                  </div>
-              </div>
-          </div>
+    <div class="max-w-4xl mx-auto">
+      <div class="card relative overflow-hidden mb-8">
+        <div class="absolute top-0 left-0 w-full h-32 bg-blue-900"></div>
+        <div class="relative pt-16 px-6 text-center">
+          <div class="profile-img mx-auto bg-blue-400 flex items-center justify-center text-white text-4xl font-bold">DT</div>
+          <h2 class="text-2xl font-black text-slate-800 mt-4">Dr. Abdulkadir Hassan</h2>
+          <p class="text-blue-600 font-bold">(Dr. Thani)</p>
+          <p class="text-slate-500 text-sm mt-2">Founder | Darusihha International Hospitals</p>
+        </div>
       </div>
+    </div>
   </section>
 
-  <!-- Backup & Recovery -->
+  <!-- System Backup -->
   <section id="tab-recovery" class="tab-content">
-    <h2 class="text-2xl font-black mb-6">Disaster Recovery (Cloud & Local)</h2>
+    <h2 class="text-2xl font-black mb-6">Disaster Recovery</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="card border-2 border-dashed border-blue-200 text-center py-10">
-        <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
-            <i class="fas fa-file-export"></i>
-        </div>
-        <h3 class="font-bold text-xl mb-2">Export System State</h3>
-        <p class="text-sm text-slate-500 mb-6 max-w-sm mx-auto">Download all records (Patients, Lab, Pharmacy, Billing) into an encrypted JSON file for external backup.</p>
-        <button onclick="exportData()" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-blue-100 transition hover:scale-105">
-          DOWNLOAD MASTER BACKUP
+        <h3 class="font-bold text-xl mb-2">Export Backup</h3>
+        <button onclick="exportData()" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold">
+          DOWNLOAD BACKUP
         </button>
       </div>
       <div class="card border-2 border-dashed border-rose-200 text-center py-10">
-        <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
-            <i class="fas fa-file-import"></i>
-        </div>
-        <h3 class="font-bold text-xl mb-2 text-rose-800">Restore System State</h3>
-        <p class="text-sm text-slate-500 mb-6 max-w-sm mx-auto">Upload a previously saved DIH-MIS backup file. Note: This will overwrite current data in this session.</p>
+        <h3 class="font-bold text-xl mb-2">Restore System</h3>
         <input type="file" id="import-file" class="hidden" onchange="importData(this)">
-        <button onclick="document.getElementById('import-file').click()" class="bg-rose-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-rose-100 transition hover:scale-105">
-          UPLOAD & RESTORE BACKUP
+        <button onclick="document.getElementById('import-file').click()" class="bg-rose-600 text-white px-8 py-3 rounded-xl font-bold">
+          RESTORE BACKUP
         </button>
       </div>
     </div>
   </section>
-  
 </main>
 
 <script>
-  // Advanced Global State Management
+  // Global State
   let state = {
     patients: JSON.parse(localStorage.getItem('dih_patients') || '[]'),
-    visits: JSON.parse(localStorage.getItem('dih_visits') || '[]'),
-    pharmacy: JSON.parse(localStorage.getItem('dih_pharmacy') || '[{"name":"Paracetamol 500mg","unit":"Box","qty":150,"price":2},{"name":"Amoxicillin 500mg","unit":"Box","qty":80,"price":4.5},{"name":"Ceftriaxone 1g Inj","unit":"Vial","qty":45,"price":3}]'),
+    pharmacy: JSON.parse(localStorage.getItem('dih_pharmacy') || '[{"name":"Paracetamol 500mg","unit":"Box","qty":150,"price":2},{"name":"Amoxicillin 500mg","unit":"Box","qty":80,"price":4.5}]'),
     billing: JSON.parse(localStorage.getItem('dih_billing') || '[]'),
-    labPending: JSON.parse(localStorage.getItem('dih_lab_pending') || '[]')
   };
 
   function syncStorage() {
     localStorage.setItem('dih_patients', JSON.stringify(state.patients));
-    localStorage.setItem('dih_visits', JSON.stringify(state.visits));
     localStorage.setItem('dih_pharmacy', JSON.stringify(state.pharmacy));
     localStorage.setItem('dih_billing', JSON.stringify(state.billing));
-    localStorage.setItem('dih_lab_pending', JSON.stringify(state.labPending));
     updateUI();
   }
 
-  // Navigation
   function switchTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     document.getElementById('tab-' + tabId).classList.add('active');
-    
     document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-    const link = document.getElementById('link-' + tabId);
-    if(link) link.classList.add('active');
-    
+    document.getElementById('link-' + tabId).classList.add('active');
     if(window.innerWidth < 1024) toggleSidebar(false);
-    
-    // Lazy Load Data
-    if(tabId === 'opd') populatePatientLists();
-    if(tabId === 'pharmacy') renderPharmacy();
-    if(tabId === 'lab') renderLab();
-    if(tabId === 'billing') renderBilling();
-    if(tabId === 'dashboard') renderDashboardTable();
   }
 
   function toggleSidebar(force) {
@@ -693,37 +509,15 @@
     else sb.classList.toggle('open');
   }
 
-  // UI Updates
   function updateUI() {
     document.getElementById('stat-patients').innerText = state.patients.length;
     let rev = state.billing.filter(b => b.status === 'Paid').reduce((acc, b) => acc + parseFloat(b.total || 0), 0);
     document.getElementById('stat-revenue').innerText = '$' + rev.toFixed(2);
-    document.getElementById('stat-emergency').innerText = state.patients.filter(p => p.department === 'Emergency' && p.status === 'Active').length;
-    document.getElementById('stat-lab').innerText = state.labPending.length;
+    document.getElementById('stat-emergency').innerText = state.patients.filter(p => p.department === 'Emergency').length;
+    document.getElementById('stat-lab').innerText = '0';
     document.getElementById('current-time').innerText = new Date().toLocaleString();
   }
 
-  function renderDashboardTable() {
-      const tbody = document.getElementById('dashboard-patient-table');
-      const recent = state.patients.slice(-5).reverse();
-      if(recent.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="4" class="py-10 text-center text-slate-400">No recent activity</td></tr>';
-          return;
-      }
-      tbody.innerHTML = recent.map(p => `
-        <tr class="border-b last:border-0">
-            <td class="py-4">
-                <p class="font-bold text-slate-800">${p.name}</p>
-                <p class="text-[10px] text-slate-400">${p.id}</p>
-            </td>
-            <td class="py-4"><span class="text-xs px-2 py-1 bg-slate-100 rounded">${p.department}</span></td>
-            <td class="py-4"><span class="w-2 h-2 rounded-full inline-block bg-green-500 mr-2"></span> Active</td>
-            <td class="py-4"><button onclick="switchTab('opd')" class="text-blue-600 hover:underline">Manage</button></td>
-        </tr>
-      `).join('');
-  }
-
-  // Reception Functions
   function savePatient() {
     const name = document.getElementById('reg-name').value;
     const age = document.getElementById('reg-age').value;
@@ -731,49 +525,120 @@
     const fee = document.getElementById('reg-fee').value;
     
     if(!name || !age) {
-        showNotify("Fadlan buuxi Magaca iyo Da'da", "error");
-        return;
+      showNotify("Please fill in required fields", "error");
+      return;
     }
 
     const pId = 'DIH-' + Math.floor(1000 + Math.random() * 9000);
-    const patient = {
-      id: pId,
-      name, age, 
-      sex: document.getElementById('reg-sex').value,
-      phone: document.getElementById('reg-phone').value,
-      department: dept,
+    state.patients.push({
+      id: pId, name, age, sex: document.getElementById('reg-sex').value,
+      phone: document.getElementById('reg-phone').value, department: dept,
       complaint: document.getElementById('reg-complaint').value,
-      status: 'Active',
-      regFee: parseFloat(fee || 0),
+      status: 'Active', regFee: parseFloat(fee || 0),
       timestamp: new Date().toISOString()
-    };
+    });
 
-    state.patients.push(patient);
-    
-    // Create initial bill
     state.billing.push({
-        id: 'INV-' + Date.now().toString().slice(-6),
-        patientId: pId,
-        patientName: name,
-        regFee: parseFloat(fee || 0),
-        labFee: 0,
-        pharmFee: 0,
-        total: parseFloat(fee || 0),
-        status: 'Unpaid',
-        date: new Date().toISOString().split('T')[0]
+      id: 'INV-' + Date.now().toString().slice(-6), patientId: pId, patientName: name,
+      regFee: parseFloat(fee || 0), labFee: 0, pharmFee: 0,
+      total: parseFloat(fee || 0), status: 'Unpaid', date: new Date().toISOString().split('T')[0]
     });
 
     syncStorage();
-    showNotify("Bukaanka waa la diiwaangeliyey!", "success");
-    
+    showNotify("Patient registered!", "success");
     document.querySelectorAll('#tab-reception input, #tab-reception textarea').forEach(i => i.value = '');
     document.getElementById('reg-fee').value = 5;
     switchTab('dashboard');
   }
 
-  // AI Assistant Rules
-  const aiKnowledge = [
-    { keys: ['qandho', 'madax', 'xanuun', 'fever'], response: "🚨 <b>Digniin:</b> Haddii ay jirto qandho aad u sarreysa iyo madax xanuun daran, fadlan u tag dhaqtarka si loo baaro Malaariyada ama Typhoid-ka." },
-    { keys: ['neef', 'cabbur', 'oxygen'], response: "🚨 <b>Degdeg:</b> Neef qabatashada waxay u baahan tahay Oxygen degdeg ah. Fadlan u gudbi qaybta Gurmadka Degdegga ah (ER) ee Darusihha hadda." },
-    { keys: ['uur', 'dhalmo', 'obgyn'], response: "🤰 <b>OB/GYN Talo:</b> Dr. Thani wuxuu ku talinayaa Ultrasound haddii aad dareemayso xanuun ama dhiig bax xilliga uurka." },
-    { keys: ['shuban', 'calool'], response: "💧 <b>
+  function sendAiMessage() {
+    const input = document.getElementById('ai-input');
+    const msg = input.value.trim();
+    if(!msg) return;
+    const chatBox = document.getElementById('ai-chat-box');
+    const userMsg = document.createElement('div');
+    userMsg.className = 'chat-msg chat-user';
+    userMsg.innerText = msg;
+    chatBox.appendChild(userMsg);
+    input.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function toggleAddDrug() {
+    document.getElementById('add-drug-form').classList.toggle('hidden');
+  }
+
+  function addDrug() {
+    const name = document.getElementById('drug-name').value;
+    const unit = document.getElementById('drug-unit').value;
+    const qty = document.getElementById('drug-qty').value;
+    const price = document.getElementById('drug-price').value;
+    if(!name || !unit || !qty || !price) { showNotify("All fields required", "error"); return; }
+    state.pharmacy.push({name, unit, qty: parseInt(qty), price: parseFloat(price)});
+    syncStorage();
+    document.getElementById('add-drug-form').classList.add('hidden');
+    showNotify("Drug added!", "success");
+    renderPharmacy();
+  }
+
+  function renderPharmacy() {
+    const tbody = document.getElementById('pharmacy-table-body');
+    tbody.innerHTML = state.pharmacy.map(drug => `
+      <tr class="border-b">
+        <td class="py-4 font-bold">${drug.name}</td>
+        <td>${drug.unit}</td>
+        <td><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">${drug.qty}</span></td>
+        <td>$${drug.price}</td>
+        <td><span class="text-xs ${drug.qty < 20 ? 'text-red-600 font-bold' : 'text-green-600'}">
+          ${drug.qty < 20 ? '⚠️ Low Stock' : '✅ Available'}
+        </span></td>
+      </tr>
+    `).join('');
+  }
+
+  function exportData() {
+    const data = { patients: state.patients, pharmacy: state.pharmacy, billing: state.billing, exportDate: new Date().toISOString() };
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'DIH-MIS-Backup-' + new Date().toISOString().split('T')[0] + '.json';
+    a.click();
+    showNotify("Backup downloaded!", "success");
+  }
+
+  function importData(input) {
+    const file = input.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        state.patients = data.patients || [];
+        state.pharmacy = data.pharmacy || [];
+        state.billing = data.billing || [];
+        syncStorage();
+        showNotify("Data restored!", "success");
+      } catch(err) {
+        showNotify("Invalid backup file!", "error");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function showNotify(msg, type) {
+    const notif = document.createElement('div');
+    notif.className = 'notification';
+    notif.style.borderLeft = '4px solid ' + (type === 'success' ? '#10b981' : '#ef4444');
+    notif.innerHTML = `<p class="font-bold text-sm">${type === 'success' ? '✅' : '❌'} ${msg}</p>`;
+    document.body.appendChild(notif);
+    setTimeout(() => notif.remove(), 3000);
+  }
+
+  updateUI();
+  setInterval(() => document.getElementById('current-time').innerText = new Date().toLocaleString(), 1000);
+  document.addEventListener('DOMContentLoaded', () => { renderPharmacy(); switchTab('dashboard'); });
+</script>
+</body>
+</html>
